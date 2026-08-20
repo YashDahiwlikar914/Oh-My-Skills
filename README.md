@@ -1,6 +1,6 @@
 # Oh My Skills
 
-This repo holds my OpenCode agent skills. There are 26 here for development and writing work. Four proprietary format skills are not included because their licenses do not allow public sharing. Those are docx, pdf, pptx, and xlsx.
+This repo holds my OpenCode agent skills. There are 27 here for development and writing work. Four proprietary format skills are not included because their licenses do not allow public sharing. Those are docx, pdf, pptx, and xlsx.
 
 ## Skills
 
@@ -36,8 +36,45 @@ This repo holds my OpenCode agent skills. There are 26 here for development and 
 
 ## Install
 
-Copy a skill folder to `~/.agents/skills/` or `~/.config/opencode/skills/`.
+Use the one liner when you want to pick skills. It handles all common harnesses and falls back to a plain copy if you do not have gh.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/install.sh | bash
+```
+
+The script shows a numbered list of skills and a list of destinations. Choose the ones you want. It defaults to .agents/skills for the current project. That path works with OpenCode, Cursor, Copilot, Codex, Gemini, Warp, and most others because they check .agents/skills as a fallback.
+
+Install every skill without prompting.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/install.sh | bash -s -- --all
+```
+
+Install one skill to a specific harness at global scope.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/install.sh | bash -s -- --skill parallel-agents --agent claude-code --global
+```
+
+List what is available or do a dry run.
+
+```bash
+./install.sh --list
+./install.sh --all --dry-run
+```
+
+Use gh when you already have it.
+
+```bash
+gh skill install YashDahiwlikar914/Oh-My-Skills --all
+gh skill install YashDahiwlikar914/Oh-My-Skills parallel-agents --agent claude-code --scope user
+```
+
+Or copy by hand.
 
 ```bash
 cp -r subagent-development ~/.agents/skills/
+cp -r subagent-development ~/.config/opencode/skills/
 ```
+
+Supported harnesses include opencode, claude-code, cursor, codex, copilot, gemini-cli, cline, windsurf, kilo-code, roo-code, aider, augment, qwen, goose, antigravity, and generic. Generic means .agents/skills. That single path is read by 80 plus harnesses as a fallback. You can also pass any custom path with --dir.
