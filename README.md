@@ -39,7 +39,7 @@ This repo holds my OpenCode agent skills. There are 27 here for development and 
 Use the one liner when you want to pick skills. It handles all common harnesses and falls back to a plain copy if you do not have gh.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash
 ```
 
 The script shows a numbered list of skills and a list of destinations. Choose the ones you want. It defaults to .agents/skills for the current project. That path works with OpenCode, Cursor, Copilot, Codex, Gemini, Warp, and most others because they check .agents/skills as a fallback.
@@ -47,20 +47,20 @@ The script shows a numbered list of skills and a list of destinations. Choose th
 Install every skill without prompting.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/install.sh | bash -s -- --all
+curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash -s -- --all
 ```
 
 Install one skill to a specific harness at global scope.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/install.sh | bash -s -- --skill parallel-agents --agent claude-code --global
+curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash -s -- --skill parallel-agents --agent claude-code --global
 ```
 
 List what is available or do a dry run.
 
 ```bash
-./install.sh --list
-./install.sh --all --dry-run
+./Install.sh --list
+./Install.sh --all --dry-run
 ```
 
 Use gh when you already have it.
