@@ -1,8 +1,6 @@
 # Oh My Skills
 
-My OpenCode agent skills collection. 26 skills for development workflows, writing, and automation.
-
-Excludes 4 proprietary format skills `docx`, `pdf`, `pptx`, `xlsx` for license reasons.
+This repo holds my OpenCode agent skills. There are 26 here for development and writing work. Four proprietary format skills are not included because their licenses do not allow public sharing. Those are docx, pdf, pptx, and xlsx.
 
 ## Skills
 
@@ -46,9 +44,9 @@ cp -r subagent-development ~/.agents/skills/
 
 ## Renames
 
-Recent renames from the original names:
+Four skills now have shorter names.
 
-- `dispatching-parallel-agents` → `parallel-agents`
-- `finishing-a-development-branch` → `finishing-a-branch`
-- `find-skills` → `finding-skills`
-- `subagent-driven-development` → `subagent-development`
+- `dispatching-parallel-agents` is now `parallel-agents`
+- `finishing-a-development-branch` is now `finishing-a-branch`
+- `find-skills` is now `finding-skills`
+- `subagent-driven-development` is now `subagent-development`
