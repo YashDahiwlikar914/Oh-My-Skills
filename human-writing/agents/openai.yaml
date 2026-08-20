@@ -1,0 +1,4 @@
+interface:
+  display_name: "Human Writing"
+  short_description: "Remove AI writing patterns from prose"
+  default_prompt: "Use $human-writing to make this text sound natural while preserving its meaning and facts."
