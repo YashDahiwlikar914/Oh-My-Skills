@@ -41,12 +41,3 @@ Copy a skill folder to `~/.agents/skills/` or `~/.config/opencode/skills/`.
 ```bash
 cp -r subagent-development ~/.agents/skills/
 ```
-
-## Renames
-
-Four skills now have shorter names.
-
-- `dispatching-parallel-agents` is now `parallel-agents`
-- `finishing-a-development-branch` is now `finishing-a-branch`
-- `find-skills` is now `finding-skills`
-- `subagent-driven-development` is now `subagent-development`
