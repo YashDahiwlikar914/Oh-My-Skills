@@ -1,6 +1,6 @@
 # Oh My Skills
 
-This repo holds my OpenCode agent skills. There are 34 here for development and writing work. Four proprietary format skills are not included because their licenses do not allow public sharing. Those are docx, pdf, pptx, and xlsx.
+This repo holds my agent skills. There are 34 here for development and writing work. Four format skills are missing, docx, pdf, pptx, and xlsx. Their licenses do not allow public sharing.
 
 ## Skills
 
@@ -43,13 +43,13 @@ This repo holds my OpenCode agent skills. There are 34 here for development and 
 
 ## Install
 
-Use the one liner when you want to pick skills. It handles all common harnesses and falls back to a plain copy if you do not have gh.
+The one liner shows a numbered skill list and a destination menu. Pick what you want. Without gh installed it falls back to a plain copy.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash
 ```
 
-The script shows a numbered list of skills and a list of destinations. Choose the ones you want. It defaults to .agents/skills for the current project. That path works with OpenCode, Cursor, Copilot, Codex, Gemini, Warp, and most others because they check .agents/skills as a fallback.
+It defaults to .agents/skills in the current project. OpenCode, Cursor, Copilot, Codex, Gemini, Warp, and most other harnesses read that path as a fallback, so one install covers many tools.
 
 Install every skill without prompting.
 
@@ -84,4 +84,35 @@ cp -r subagent-development ~/.agents/skills/
 cp -r subagent-development ~/.config/opencode/skills/
 ```
 
-Supported harnesses, with install paths verified against each vendor's official docs, include claude-code (.claude/skills), opencode (.opencode/skills), codex (.agents/skills, Codex does not read .codex/skills), copilot (.github/skills), gemini-cli (.gemini/skills), antigravity (~/.gemini/config/skills globally, .agents/skills per project), cursor (.cursor/skills), windsurf (.windsurf/skills), cline (.cline/skills), kilo-code (.kilo/skills), roo-code (.roo/skills), amp (~/.config/agents/skills globally), zed (.agents/skills), warp (.warp/skills), trae (.trae/skills), pi (.pi/skills), jetbrains (.junie/skills), replit (.agents/skills), factory (.factory/skills), devin, openhands, goose, augment (.augment/skills), qwen (.qwen/skills), and generic (.agents/skills). Generic works with 80 plus harnesses as a fallback. You can also pass any custom path with --dir. Aider and Continue have no skills support and are excluded.
+## Harness Paths
+
+I checked every path against the vendor's own docs in September 2026.
+
+| Harness | Global | Project |
+|---|---|---|
+| claude-code | ~/.claude/skills | .claude/skills |
+| opencode | ~/.config/opencode/skills | .opencode/skills |
+| codex | ~/.agents/skills | .agents/skills |
+| copilot | ~/.copilot/skills | .github/skills |
+| gemini-cli | ~/.gemini/skills | .gemini/skills |
+| antigravity | ~/.gemini/config/skills | .agents/skills |
+| cursor | ~/.cursor/skills | .cursor/skills |
+| windsurf | ~/.codeium/windsurf/skills | .windsurf/skills |
+| cline | ~/.cline/skills | .cline/skills |
+| kilo-code | ~/.kilo/skills | .kilo/skills |
+| roo-code | ~/.roo/skills | .roo/skills |
+| amp | ~/.config/agents/skills | .agents/skills |
+| zed | ~/.agents/skills | .agents/skills |
+| warp | ~/.warp/skills | .warp/skills |
+| trae | ~/.trae/skills | .trae/skills |
+| pi | ~/.pi/agent/skills | .pi/skills |
+| jetbrains | ~/.junie/skills | .junie/skills |
+| replit | ~/.agents/skills | .agents/skills |
+| factory | ~/.factory/skills | .factory/skills |
+| devin | ~/.config/devin/skills | .agents/skills |
+| openhands | ~/.agents/skills | .agents/skills |
+| goose | ~/.agents/skills | .agents/skills |
+| augment | ~/.augment/skills | .augment/skills |
+| qwen | ~/.qwen/skills | .qwen/skills |
+
+Codex, Zed, Goose, and OpenHands only read .agents/skills. Antigravity reads ~/.gemini/config/skills globally and .agents/skills per project. Generic means .agents/skills, which most harnesses read too. Pass --dir for any custom path. Aider and Continue have no skills support, so they are not listed.
