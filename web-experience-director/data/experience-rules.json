@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-08-27",
+  "status": "active",
+  "rules": [
+    {
+      "id": "spatial-inspection",
+      "signals": ["3d", "3d viewer", "product viewer", "model viewer", "webxr", "spatial", "rotate", "inspect materials", "configure object", "virtual tour"],
+      "experienceLevel": "interactive-3d",
+      "reason": "The user needs to inspect or manipulate a spatial subject.",
+      "constraints": ["semantic DOM for product facts and actions", "visible preset and reset controls", "keyboard controls", "touch and non-drag alternatives", "reduced motion", "static no-WebGL fallback"],
+      "fallback": "Use a responsive static gallery or turntable with the same content and controls."
+    },
+    {
+      "id": "narrative-depth",
+      "signals": ["cinematic", "editorial", "portfolio", "photo essay", "scrollytelling", "fashion archive", "immersive story"],
+      "experienceLevel": "2.5d",
+      "reason": "Layered composition can add narrative depth without a live 3D renderer.",
+      "constraints": ["semantic DOM for reading and navigation", "stable content rail", "normal document scrolling", "reduced motion", "static image fallback"],
+      "fallback": "Use the final layered composition with direct state changes and no travel."
+    },
+    {
+      "id": "routine-task",
+      "signals": ["dashboard", "finance", "balances", "form", "checkout", "eligibility", "admin", "documentation", "data table", "morning check"],
+      "experienceLevel": "routine-ui",
+      "reason": "The primary need is fast comprehension or task completion.",
+      "constraints": ["semantic DOM", "clear hierarchy", "keyboard operation", "touch operation", "reduced motion", "fast first content"],
+      "fallback": "The semantic interface is the complete experience and needs no visual enhancement."
+    }
+  ],
+  "default": {
+    "experienceLevel": "routine-ui",
+    "reason": "No spatial or narrative need was established.",
+    "constraints": ["semantic DOM", "responsive composition", "keyboard operation", "touch operation", "reduced motion"],
+    "fallback": "Keep the standard responsive interface as the complete experience."
+  }
+}

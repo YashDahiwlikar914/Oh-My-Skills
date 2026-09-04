@@ -1,0 +1,61 @@
+{
+  "skill_name": "ponytail",
+  "trigger_evals": {
+    "should_trigger": [
+      {"query": "What's the simplest way to parse this CSV file?", "should_trigger": true},
+      {"query": "Keep it simple, just add a flag to the build script", "should_trigger": true},
+      {"query": "Make it work with the fewest files possible", "should_trigger": true},
+      {"query": "Do the minimal cache for these responses", "should_trigger": true},
+      {"query": "Add this without pulling in a new library", "should_trigger": true},
+      {"query": "No new dependency for the date formatting, use what's there", "should_trigger": true},
+      {"query": "Lean version of the auth flow, bare minimum", "should_trigger": true},
+      {"query": "Just ship it, one-liner is fine", "should_trigger": true},
+      {"query": "Simplify this helper, it's bloated", "should_trigger": true},
+      {"query": "Humanize this generated code, it's full of AI slop", "should_trigger": true},
+      {"query": "Write the MVP endpoint, don't overbuild", "should_trigger": true},
+      {"query": "I want the minimal correct solution for the parser", "should_trigger": true}
+    ],
+    "should_not_trigger": [
+      {"query": "Fix the typo in the README", "should_trigger": false},
+      {"query": "Explain what this function does", "should_trigger": false},
+      {"query": "Write a blog post about our release", "should_trigger": false},
+      {"query": "Update the dependency version", "should_trigger": false},
+      {"query": "Translate this string to French", "should_trigger": false},
+      {"query": "Review my code for performance bottlenecks", "should_trigger": false},
+      {"query": "Design the full microservice architecture with event sourcing", "should_trigger": false},
+      {"query": "Show me the git log", "should_trigger": false}
+    ]
+  },
+  "task_evals": [
+    {
+      "id": 1,
+      "prompt": "Add a response cache for these API calls. Keep it simple. Do not add a new dependency.",
+      "expected_output": "The agent uses stdlib (e.g. functools.lru_cache) instead of a new cache class, cites the ladder rung, and skips the over-built version. It preserves the fetch behavior and notes when a real cache is warranted.",
+      "expectations": [
+        "Response uses an installed stdlib feature rather than a new dependency",
+        "Response cites the ladder rung chosen",
+        "Response skips the over-built alternative with a clear 'add when' condition"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "This helper has a one-use factory and a wrapper that only forwards calls. Simplify it. Lean.",
+      "expected_output": "The agent inlines the one-implementation factory and removes the forwarding wrapper, keeping behavior. It applies the abstraction test, not a blanket deletion.",
+      "expectations": [
+        "Response treats the one-implementation factory as a review question, not an automatic deletion",
+        "Response preserves the original behavior",
+        "Response notes the guardrail that justifies keeping or removing the boundary"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Inside a writing-plans task, a plan step proposes a new utility module and a dependency for date formatting. Apply ponytail.",
+      "expected_output": "The agent flags the new module and dependency at pre-flight, applies ladder rungs 2-5, and keeps the installed stdlib date formatter instead. It does not silently delete a needed boundary.",
+      "expectations": [
+        "Response applies ladder rungs 2-5 to the file-structure decision",
+        "Response prefers the installed stdlib over a new dependency",
+        "Response cites the rung chosen and the guardrail applied"
+      ]
+    }
+  ]
+}

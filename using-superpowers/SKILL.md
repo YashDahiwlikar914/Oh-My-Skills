@@ -29,6 +29,7 @@ When multiple skills apply, process skills come first — they set the approach,
 
 - "Let's build X" → superpowers:brainstorming first, then implementation skills.
 - "Fix this bug" → superpowers:systematic-debugging first, then domain skills.
+- "Simplest way" / "keep it simple" / "lean" / "no new deps" / "fewest files" → superpowers:ponytail as a lens inside the active build task (brainstorming approach, writing-plans decomposition, subagent-development pre-flight and self-review). Ponytail is not a standalone phase; it enforces the minimal-correct ladder and code-trimming guardrails where code is chosen.
 
 ## Red Flags
 

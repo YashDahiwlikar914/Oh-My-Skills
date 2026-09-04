@@ -1,6 +1,6 @@
 ---
 name: human-writing
-description: Use when rewriting or reviewing prose or other human-facing text that is AI-generated or AI-like, including README and technical documentation prose that is formulaic, promotional, repetitive, vague, overly polished, robotic, or unnatural. Use code-humanizer when source-code structure or behavior is the target.
+description: Use when rewriting or reviewing prose or other human-facing text that is AI-generated or AI-like, including README and technical documentation prose that is formulaic, promotional, repetitive, vague, overly polished, robotic, or unnatural. Use code-trimming when source-code structure or behavior is the target.
 license: MIT
 metadata:
   version: "3.0.1"

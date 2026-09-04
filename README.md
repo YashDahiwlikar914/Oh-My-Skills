@@ -1,6 +1,6 @@
 # Oh My Skills
 
-This repo holds my OpenCode agent skills. There are 27 here for development and writing work. Four proprietary format skills are not included because their licenses do not allow public sharing. Those are docx, pdf, pptx, and xlsx.
+This repo holds my OpenCode agent skills. There are 34 here for development and writing work. Four proprietary format skills are not included because their licenses do not allow public sharing. Those are docx, pdf, pptx, and xlsx.
 
 ## Skills
 
@@ -9,15 +9,20 @@ This repo holds my OpenCode agent skills. There are 27 here for development and 
 | brainstorming | Turn ideas into designs through collaborative dialogue |
 | clarifying-requirements | Ask for missing context before acting |
 | code-humanizer | De-AI code and make it maintainable |
+| code-trimming | Review and simplify over-engineered or AI-generated code |
+| copywriting | Write conversion-focused marketing copy |
 | evaluating-skills | Measure skill trigger and task performance |
 | executing-plans | Execute a written plan with checkpoints |
+| financial-reasoning | Financial reasoning with Indian context and current data |
 | finding-skills | Discover and install skills from the ecosystem |
 | finishing-a-branch | Verify and integrate a branch or worktree |
 | handoff | Create a compact continuation record for another agent |
 | human-writing | Rewrite AI-like prose to sound human |
+| legal-writing | Draft and audit legal pages for India-first sites |
 | omarchy | Customize Omarchy Linux desktop |
 | parallel-agents | Dispatch independent tasks concurrently |
 | ponytail | Minimal coding solutions, YAGNI approach |
+| prompt-master | Write and improve prompts for AI tools |
 | receiving-code-review | Evaluate and respond to review feedback |
 | requesting-code-review | Dispatch an independent reviewer before merge |
 | research-paper-writer | Write academic papers in IEEE/ACM style |
@@ -26,9 +31,11 @@ This repo holds my OpenCode agent skills. There are 27 here for development and 
 | systematic-debugging | Debug failing tests and integration issues |
 | teach | Multi-session teaching from foundations to research level |
 | test-driven-development | Test-first feature and bugfix workflow |
+| ui-ux-pro-max | Build and review UI and UX interfaces |
 | using-git-worktrees | Work with isolated git worktrees |
 | using-superpowers | Route to the right superpowers skill |
 | verification-before-completion | Verify before claiming done or opening a PR |
+| web-experience-director | Direct web experiences from UI to cinematic 3D |
 | web-scraping | Search and extract web content reliably |
 | writing-for-agents | Structure agent-facing docs with progressive disclosure |
 | writing-plans | Write an implementation plan before coding |
