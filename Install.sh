@@ -173,59 +173,33 @@ agentToPath() {
   # Checked against vendor docs in Sep 2026. The surprises:
   # codex, zed, goose, openhands only read .agents/skills, never their own dir.
   # antigravity reads ~/.gemini/config/skills globally, .agents/skills per project.
-  local agent="$1"
-  local scope="$2"
-  case "${agent}" in
-    claude-code|claude|anthropic)
-      [[ "$scope" == "global" ]] && echo "$HOME/.claude/skills" || echo ".claude/skills" ;;
-    opencode)
-      [[ "$scope" == "global" ]] && echo "$HOME/.config/opencode/skills" || echo ".opencode/skills" ;;
-    codex|openai-codex|openai)
-      [[ "$scope" == "global" ]] && echo "$HOME/.agents/skills" || echo ".agents/skills" ;;
-    copilot|github-copilot|github|vscode)
-      [[ "$scope" == "global" ]] && echo "$HOME/.copilot/skills" || echo ".github/skills" ;;
-    gemini|gemini-cli|google-gemini)
-      [[ "$scope" == "global" ]] && echo "$HOME/.gemini/skills" || echo ".gemini/skills" ;;
-    antigravity|antigravity-ide|google-antigravity|firebase)
-      [[ "$scope" == "global" ]] && echo "$HOME/.gemini/config/skills" || echo ".agents/skills" ;;
-    cursor|cursor-ide)
-      [[ "$scope" == "global" ]] && echo "$HOME/.cursor/skills" || echo ".cursor/skills" ;;
-    windsurf|windsurf-ide|codeium|codeium-windsurf)
-      [[ "$scope" == "global" ]] && echo "$HOME/.codeium/windsurf/skills" || echo ".windsurf/skills" ;;
-    cline)
-      [[ "$scope" == "global" ]] && echo "$HOME/.cline/skills" || echo ".cline/skills" ;;
-    kilo|kilo-code)
-      [[ "$scope" == "global" ]] && echo "$HOME/.kilo/skills" || echo ".kilo/skills" ;;
-    roo|roo-code)
-      [[ "$scope" == "global" ]] && echo "$HOME/.roo/skills" || echo ".roo/skills" ;;
-    amp|ampcode|sourcegraph-amp)
-      [[ "$scope" == "global" ]] && echo "$HOME/.config/agents/skills" || echo ".agents/skills" ;;
-    zed)
-      [[ "$scope" == "global" ]] && echo "$HOME/.agents/skills" || echo ".agents/skills" ;;
-    warp)
-      [[ "$scope" == "global" ]] && echo "$HOME/.warp/skills" || echo ".warp/skills" ;;
-    trae|trae-ide|bytedance-trae)
-      [[ "$scope" == "global" ]] && echo "$HOME/.trae/skills" || echo ".trae/skills" ;;
-    pi|pi-agent)
-      [[ "$scope" == "global" ]] && echo "$HOME/.pi/agent/skills" || echo ".pi/skills" ;;
-    jetbrains|jetbrains-ai|junie)
-      [[ "$scope" == "global" ]] && echo "$HOME/.junie/skills" || echo ".junie/skills" ;;
-    replit|replit-agent)
-      [[ "$scope" == "global" ]] && echo "$HOME/.agents/skills" || echo ".agents/skills" ;;
-    factory|droid|factory-droid)
-      [[ "$scope" == "global" ]] && echo "$HOME/.factory/skills" || echo ".factory/skills" ;;
-    devin|cognition-devin)
-      [[ "$scope" == "global" ]] && echo "$HOME/.config/devin/skills" || echo ".agents/skills" ;;
-    openhands|all-hands)
-      [[ "$scope" == "global" ]] && echo "$HOME/.agents/skills" || echo ".agents/skills" ;;
-    goose)
-      [[ "$scope" == "global" ]] && echo "$HOME/.agents/skills" || echo ".agents/skills" ;;
-    augment)
-      [[ "$scope" == "global" ]] && echo "$HOME/.augment/skills" || echo ".augment/skills" ;;
-    qwen|qwen-code|alibaba-qwen)
-      [[ "$scope" == "global" ]] && echo "$HOME/.qwen/skills" || echo ".qwen/skills" ;;
-    *)
-      [[ "$scope" == "global" ]] && echo "$HOME/.agents/skills" || echo ".agents/skills" ;;
+  # Echoes "<global>|<project>" and the caller picks a side.
+  case "$1" in
+    claude-code|claude|anthropic)            echo "$HOME/.claude/skills|.claude/skills" ;;
+    opencode)                                echo "$HOME/.config/opencode/skills|.opencode/skills" ;;
+    codex|openai-codex|openai)               echo "$HOME/.agents/skills|.agents/skills" ;;
+    copilot|github-copilot|github|vscode)    echo "$HOME/.copilot/skills|.github/skills" ;;
+    gemini|gemini-cli|google-gemini)         echo "$HOME/.gemini/skills|.gemini/skills" ;;
+    antigravity|antigravity-ide|google-antigravity|firebase) echo "$HOME/.gemini/config/skills|.agents/skills" ;;
+    cursor|cursor-ide)                       echo "$HOME/.cursor/skills|.cursor/skills" ;;
+    windsurf|windsurf-ide|codeium|codeium-windsurf) echo "$HOME/.codeium/windsurf/skills|.windsurf/skills" ;;
+    cline)                                   echo "$HOME/.cline/skills|.cline/skills" ;;
+    kilo|kilo-code)                          echo "$HOME/.kilo/skills|.kilo/skills" ;;
+    roo|roo-code)                            echo "$HOME/.roo/skills|.roo/skills" ;;
+    amp|ampcode|sourcegraph-amp)             echo "$HOME/.config/agents/skills|.agents/skills" ;;
+    zed)                                     echo "$HOME/.agents/skills|.agents/skills" ;;
+    warp)                                    echo "$HOME/.warp/skills|.warp/skills" ;;
+    trae|trae-ide|bytedance-trae)            echo "$HOME/.trae/skills|.trae/skills" ;;
+    pi|pi-agent)                             echo "$HOME/.pi/agent/skills|.pi/skills" ;;
+    jetbrains|jetbrains-ai|junie)            echo "$HOME/.junie/skills|.junie/skills" ;;
+    replit|replit-agent)                     echo "$HOME/.agents/skills|.agents/skills" ;;
+    factory|droid|factory-droid)             echo "$HOME/.factory/skills|.factory/skills" ;;
+    devin|cognition-devin)                   echo "$HOME/.config/devin/skills|.agents/skills" ;;
+    openhands|all-hands)                     echo "$HOME/.agents/skills|.agents/skills" ;;
+    goose)                                   echo "$HOME/.agents/skills|.agents/skills" ;;
+    augment)                                 echo "$HOME/.augment/skills|.augment/skills" ;;
+    qwen|qwen-code|alibaba-qwen)             echo "$HOME/.qwen/skills|.qwen/skills" ;;
+    *)                                       echo "$HOME/.agents/skills|.agents/skills" ;;
   esac
 }
 
@@ -241,9 +215,7 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
   if [[ "$ALL" == true ]]; then
     SKILLS=("${AVAILABLE[@]}")
   elif [[ -t 0 ]]; then
-    PICKED_SKILLS=()
-    multiSelect "Select Skills. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AVAILABLE PICKED_SKILLS
-    SKILLS=("${PICKED_SKILLS[@]}")
+    multiSelect "Select Skills. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AVAILABLE SKILLS
     if [[ ${#SKILLS[@]} -eq 0 ]]; then
       echo "Nothing Selected"
       exit 0
@@ -274,14 +246,9 @@ else
   if [[ ${#AGENTS[@]} -eq 0 ]]; then
     if [[ -t 0 ]]; then
       AGENT_CHOICES=(generic claude-code opencode antigravity cursor windsurf copilot codex gemini-cli cline kilo-code roo-code amp zed warp trae pi jetbrains replit factory devin openhands goose augment qwen)
-      PICKED_AGENTS=()
-      multiSelect "Select Destinations. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AGENT_CHOICES PICKED_AGENTS
-      if [[ ${#PICKED_AGENTS[@]} -eq 0 ]]; then
-        AGENTS=("generic")
-      else
-        AGENTS=("${PICKED_AGENTS[@]}")
-      fi
-    else
+      multiSelect "Select Destinations. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AGENT_CHOICES AGENTS
+    fi
+    if [[ ${#AGENTS[@]} -eq 0 ]]; then
       AGENTS=("generic")
     fi
   fi
@@ -289,7 +256,12 @@ else
   for a in "${AGENTS[@]}"; do
     a="${a//[[:space:]]/}"
     a="${a,,}"
-    DESTS+=("$(agentToPath "$a" "$SCOPE")")
+    pair="$(agentToPath "$a")"
+    if [[ "$SCOPE" == "global" ]]; then
+      DESTS+=("${pair%%|*}")
+    else
+      DESTS+=("${pair##*|}")
+    fi
   done
   # Agents can share one path (codex, zed, goose all read .agents/skills).
   # Dedupe so each destination installs once.
@@ -303,7 +275,7 @@ printf "%bDests%b   %s\n" "${GREEN}" "${NC}" "${DESTS[*]}"
 printf "\n"
 
 USE_GH=false
-if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
+if [[ "$DRY_RUN" == false ]] && command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
   if [[ -t 0 ]]; then
     read -rp "Use The gh Skill Installer Where Supported? [y/N]: " GHANS || GHANS=""
     [[ "$GHANS" =~ ^[Yy]$ ]] && USE_GH=true
@@ -311,11 +283,7 @@ if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
 fi
 
 for skill in "${SKILLS[@]}"; do
-  FOUND=false
-  for avail in "${AVAILABLE[@]}"; do
-    if [[ "$avail" == "$skill" ]]; then FOUND=true; break; fi
-  done
-  if [[ "$FOUND" == false ]]; then
+  if ! printf '%s\n' "${AVAILABLE[@]}" | grep -qx -- "$skill"; then
     printf "%bSkip Unknown Skill %s%b\n" "${YELLOW}" "$skill" "${NC}"
     continue
   fi
@@ -326,17 +294,16 @@ for skill in "${SKILLS[@]}"; do
       continue
     fi
     if [[ "$USE_GH" == true ]]; then
+      # gh appends the skill name itself, so --dir takes the destination root.
       printf "%bInstalling%b %s Via gh To %s\n" "${GREEN}" "${NC}" "$skill" "$dest"
-      if ! gh skill install "${REPO}" "$skill" --agent generic --scope "$SCOPE" --force 2>&1; then
-        printf "%bgh Install Failed, Falling Back To Copy%b\n" "${YELLOW}" "${NC}"
-        mkdir -p -- "$TARGET"
-        cp -r -- "${SRC}/${skill}/." "$TARGET/"
+      if gh skill install "${REPO}" "$skill" --dir "$dest" --force >/dev/null 2>&1; then
+        continue
       fi
-    else
-      printf "%bCopying%b %s -> %s\n" "${GREEN}" "${NC}" "$skill" "$TARGET"
-      mkdir -p -- "$TARGET"
-      cp -r -- "${SRC}/${skill}/." "$TARGET/"
+      printf "%bgh Install Failed, Falling Back To Copy%b\n" "${YELLOW}" "${NC}"
     fi
+    printf "%bCopying%b %s -> %s\n" "${GREEN}" "${NC}" "$skill" "$TARGET"
+    mkdir -p -- "$TARGET"
+    cp -r -- "${SRC}/${skill}/." "$TARGET/"
   done
 done
 
