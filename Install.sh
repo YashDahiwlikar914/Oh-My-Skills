@@ -19,9 +19,13 @@ SKILLS=()
 CUSTOM_DIR=""
 TMP_DIR=""
 
-# curl pipes this script on stdin, so interactive reads must come from /dev/tty.
+# curl pipes this script on stdin, so interactive reads cannot use stdin.
+# Some shells do not give a piped Bash process a controlling tty. On Linux,
+# the parent shell's stdin still points at the terminal.
 TTY_FD=""
 if { exec {fd}</dev/tty; } 2>/dev/null; then
+  TTY_FD="$fd"
+elif [[ -r "/proc/${PPID}/fd/0" ]] && { exec {fd}<"/proc/${PPID}/fd/0"; } 2>/dev/null; then
   TTY_FD="$fd"
 fi
 
