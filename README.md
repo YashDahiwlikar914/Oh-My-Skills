@@ -84,4 +84,4 @@ cp -r subagent-development ~/.agents/skills/
 cp -r subagent-development ~/.config/opencode/skills/
 ```
 
-Supported harnesses include opencode, claude-code, cursor, codex, copilot, gemini-cli, cline, windsurf, kilo-code, roo-code, aider, augment, qwen, goose, antigravity, and generic. Generic means .agents/skills. That single path is read by 80 plus harnesses as a fallback. You can also pass any custom path with --dir.
+Supported harnesses include opencode, claude-code, antigravity, cursor, windsurf, copilot, codex, gemini-cli, cline, kilo-code, roo-code, aider, augment, qwen, goose, amp, zed, warp, trae, continue, pi, jetbrains, replit, bolt, factory, devin, openhands, cody, tabnine, and generic. Generic means .agents/skills. That single path is read by 80 plus harnesses as a fallback. You can also pass any custom path with --dir. Antigravity IDE uses .antigravity/skills in projects and ~/.config/antigravity/skills globally.

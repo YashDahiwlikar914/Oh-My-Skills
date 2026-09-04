@@ -41,10 +41,20 @@ Options:
   --dry-run          Show what would be done without copying
   --help             Show this help
 
+Supported Agents:
+  opencode, claude-code, antigravity, cursor, windsurf, copilot, codex, gemini-cli,
+  cline, kilo-code, roo-code, aider, augment, qwen, goose, amp, zed, warp, trae,
+  continue, pi, jetbrains, replit, bolt, factory, devin, openhands, cody, tabnine,
+  supermaven, v0, lovable, vscode, neovim, firebase-studio, generic
+  Use --agent multiple times for multiple harnesses. Generic is .agents/skills
+  which is read by 80+ harnesses as a fallback.
+
 Examples:
   curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash
   curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash -s -- --all
   curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash -s -- --skill parallel-agents --agent claude-code --global
+  curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash -s -- --skill web-experience-director --agent antigravity --global
+  curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash -s -- --skill ui-ux-pro-max --agent amp --agent zed --global
   ./Install.sh --all --dir ~/.config/opencode/skills
 HELP
 }
@@ -117,20 +127,40 @@ agentToPath() {
   local scope="$2"
   case "${agent}" in
     opencode)             [[ "$scope" == "global" ]] && echo "$HOME/.config/opencode/skills" || echo ".agents/skills" ;;
-    claude-code|claude)   [[ "$scope" == "global" ]] && echo "$HOME/.claude/skills" || echo ".claude/skills" ;;
-    cursor)               [[ "$scope" == "global" ]] && echo "$HOME/.cursor/skills" || echo ".cursor/skills" ;;
-    codex|openai-codex)   [[ "$scope" == "global" ]] && echo "$HOME/.codex/skills" || echo ".codex/skills" ;;
-    copilot|github-copilot) [[ "$scope" == "global" ]] && echo "$HOME/.copilot/skills" || echo ".github/skills" ;;
-    gemini|gemini-cli)    [[ "$scope" == "global" ]] && echo "$HOME/.gemini/skills" || echo ".gemini/skills" ;;
+    claude-code|claude|anthropic)   [[ "$scope" == "global" ]] && echo "$HOME/.claude/skills" || echo ".claude/skills" ;;
+    cursor|cursor-ide)               [[ "$scope" == "global" ]] && echo "$HOME/.cursor/skills" || echo ".cursor/skills" ;;
+    codex|openai-codex|openai)   [[ "$scope" == "global" ]] && echo "$HOME/.codex/skills" || echo ".codex/skills" ;;
+    copilot|github-copilot|github) [[ "$scope" == "global" ]] && echo "$HOME/.copilot/skills" || echo ".github/skills" ;;
+    gemini|gemini-cli|google-gemini)    [[ "$scope" == "global" ]] && echo "$HOME/.gemini/skills" || echo ".gemini/skills" ;;
+    antigravity|antigravity-ide|google-antigravity) [[ "$scope" == "global" ]] && echo "$HOME/.config/antigravity/skills" || echo ".antigravity/skills" ;;
     cline)                [[ "$scope" == "global" ]] && echo "$HOME/.cline/skills" || echo ".cline/skills" ;;
-    windsurf)             [[ "$scope" == "global" ]] && echo "$HOME/.codeium/windsurf/skills" || echo ".windsurf/skills" ;;
+    windsurf|windsurf-ide|codeium-windsurf|codeium)             [[ "$scope" == "global" ]] && echo "$HOME/.codeium/windsurf/skills" || echo ".windsurf/skills" ;;
     kilo|kilo-code)       [[ "$scope" == "global" ]] && echo "$HOME/.kilocode/skills" || echo ".kilocode/skills" ;;
     roo|roo-code)         [[ "$scope" == "global" ]] && echo "$HOME/.roo/skills" || echo ".roo/skills" ;;
     aider)                [[ "$scope" == "global" ]] && echo "$HOME/.aider/skills" || echo ".aider/skills" ;;
     augment)              [[ "$scope" == "global" ]] && echo "$HOME/.augment/skills" || echo ".augment/skills" ;;
-    qwen)                 [[ "$scope" == "global" ]] && echo "$HOME/.qwen/skills" || echo ".qwen/skills" ;;
+    qwen|qwen-code|alibaba-qwen)                 [[ "$scope" == "global" ]] && echo "$HOME/.qwen/skills" || echo ".qwen/skills" ;;
     goose)                [[ "$scope" == "global" ]] && echo "$HOME/.config/goose/skills" || echo ".goose/skills" ;;
-    antigravity)          [[ "$scope" == "global" ]] && echo "$HOME/.gemini/antigravity/skills" || echo ".agents/skills" ;;
+    amp|ampcode|sourcegraph-amp)          [[ "$scope" == "global" ]] && echo "$HOME/.config/amp/skills" || echo ".amp/skills" ;;
+    zed)                  [[ "$scope" == "global" ]] && echo "$HOME/.config/zed/skills" || echo ".zed/skills" ;;
+    warp)                 [[ "$scope" == "global" ]] && echo "$HOME/.warp/skills" || echo ".warp/skills" ;;
+    trae|trae-ide|bytedance-trae)        [[ "$scope" == "global" ]] && echo "$HOME/.config/trae/skills" || echo ".trae/skills" ;;
+    continue|continue-dev)                [[ "$scope" == "global" ]] && echo "$HOME/.continue/skills" || echo ".continue/skills" ;;
+    pi|pi-agent)          [[ "$scope" == "global" ]] && echo "$HOME/.pi/agent/skills" || echo ".pi/skills" ;;
+    jetbrains|jetbrains-ai|junie) [[ "$scope" == "global" ]] && echo "$HOME/.config/JetBrains/skills" || echo ".jetbrains/skills" ;;
+    replit|replit-agent) [[ "$scope" == "global" ]] && echo "$HOME/.config/replit/skills" || echo ".replit/skills" ;;
+    bolt|stackblitz|bolt-diy) [[ "$scope" == "global" ]] && echo "$HOME/.config/bolt/skills" || echo ".bolt/skills" ;;
+    factory|droid|factory-droid) [[ "$scope" == "global" ]] && echo "$HOME/.factory/skills" || echo ".factory/skills" ;;
+    devin|cognition-devin) [[ "$scope" == "global" ]] && echo "$HOME/.config/devin/skills" || echo ".devin/skills" ;;
+    openhands|all-hands) [[ "$scope" == "global" ]] && echo "$HOME/.openhands/skills" || echo ".openhands/skills" ;;
+    cody|sourcegraph-cody) [[ "$scope" == "global" ]] && echo "$HOME/.config/cody/skills" || echo ".cody/skills" ;;
+    tabnine) [[ "$scope" == "global" ]] && echo "$HOME/.tabnine/skills" || echo ".tabnine/skills" ;;
+    supermaven) [[ "$scope" == "global" ]] && echo "$HOME/.supermaven/skills" || echo ".supermaven/skills" ;;
+    v0|vercel-v0) [[ "$scope" == "global" ]] && echo "$HOME/.config/v0/skills" || echo ".v0/skills" ;;
+    lovable) [[ "$scope" == "global" ]] && echo "$HOME/.config/lovable/skills" || echo ".lovable/skills" ;;
+    vscode|vs-code|code) [[ "$scope" == "global" ]] && echo "$HOME/.vscode/skills" || echo ".vscode/skills" ;;
+    neovim|nvim|avante) [[ "$scope" == "global" ]] && echo "$HOME/.config/nvim/skills" || echo ".nvim/skills" ;;
+    firebase-studio|firebase) [[ "$scope" == "global" ]] && echo "$HOME/.config/firebase/studio/skills" || echo ".firebase/skills" ;;
     *)                    [[ "$scope" == "global" ]] && echo "$HOME/.agents/skills" || echo ".agents/skills" ;;
   esac
 }
@@ -189,21 +219,29 @@ else
   if [[ ${#AGENTS[@]} -eq 0 ]]; then
     if [[ -t 0 && "$SCOPE" == "project" ]]; then
       echo ""
-      echo "Where to install? This covers 80+ harnesses via .agents/skills as fallback."
-      echo "  1) Generic .agents/skills  - works with OpenCode, Cursor, Copilot, Codex, Gemini, Warp, and most others"
-      echo "  2) Claude Code             - .claude/skills"
-      echo "  3) Cursor                  - .cursor/skills"
-      echo "  4) OpenCode                - .config/opencode/skills when --global"
-      echo "  5) Pick specific harnesses"
+      echo "Where to install? Generic .agents/skills works with 80+ harnesses as fallback."
+      echo "  1) Generic .agents/skills   - works with OpenCode, Warp, and most others"
+      echo "  2) Claude Code              - .claude/skills"
+      echo "  3) Antigravity IDE          - .antigravity/skills"
+      echo "  4) Cursor                   - .cursor/skills"
+      echo "  5) Windsurf                 - .codeium/windsurf/skills"
+      echo "  6) GitHub Copilot           - .github/skills"
+      echo "  7) OpenCode                 - .config/opencode/skills when --global"
+      echo "  8) Gemini CLI               - .gemini/skills"
+      echo "  9) Pick specific harnesses"
       read -rp "Pick destination [1]: " DPICK || DPICK=""
       DPICK=${DPICK:-1}
       case "$DPICK" in
         1) AGENTS=("generic") ;;
         2) AGENTS=("claude-code") ;;
-        3) AGENTS=("cursor") ;;
-        4) AGENTS=("opencode") ;;
-        5)
-          echo "Supported harnesses: opencode, claude-code, cursor, codex, copilot, gemini-cli, cline, windsurf, kilo-code, roo-code, aider, augment, qwen, goose, antigravity, generic"
+        3) AGENTS=("antigravity") ;;
+        4) AGENTS=("cursor") ;;
+        5) AGENTS=("windsurf") ;;
+        6) AGENTS=("copilot") ;;
+        7) AGENTS=("opencode") ;;
+        8) AGENTS=("gemini-cli") ;;
+        9)
+          echo "Supported harnesses: opencode, claude-code, antigravity, cursor, windsurf, copilot, codex, gemini-cli, cline, kilo-code, roo-code, aider, augment, qwen, goose, amp, zed, warp, trae, continue, pi, jetbrains, replit, bolt, factory, devin, openhands, cody, tabnine, generic"
           read -rp "Enter harness names comma separated: " APICK || APICK=""
           IFS=',' read -ra AGENTS <<< "$APICK"
           ;;
