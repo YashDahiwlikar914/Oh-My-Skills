@@ -19,6 +19,12 @@ SKILLS=()
 CUSTOM_DIR=""
 TMP_DIR=""
 
+# curl pipes this script on stdin, so interactive reads must come from /dev/tty.
+TTY_FD=""
+if { exec {fd}</dev/tty; } 2>/dev/null; then
+  TTY_FD="$fd"
+fi
+
 cleanup() {
   if [[ -n "${TMP_DIR}" && -d "${TMP_DIR}" ]]; then
     rm -rf -- "${TMP_DIR}"
@@ -142,9 +148,9 @@ multiSelect() {
     done
     key=""
     # IFS= matters. read would otherwise strip the space key itself.
-    IFS= read -rsn1 key || true
+    IFS= read -rsn1 -u "$TTY_FD" key || true
     if [[ "$key" == $'\e' ]]; then
-      IFS= read -rsn2 key || true
+      IFS= read -rsn2 -u "$TTY_FD" key || true
       case "$key" in
         '[A') i=$(( (i + count - 1) % count )) ;;
         '[B') i=$(( (i + 1) % count )) ;;
@@ -214,7 +220,7 @@ fi
 if [[ ${#SKILLS[@]} -eq 0 ]]; then
   if [[ "$ALL" == true ]]; then
     SKILLS=("${AVAILABLE[@]}")
-  elif [[ -t 0 ]]; then
+  elif [[ -n "$TTY_FD" ]]; then
     multiSelect "Select Skills. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AVAILABLE SKILLS
     if [[ ${#SKILLS[@]} -eq 0 ]]; then
       echo "Nothing Selected"
@@ -244,7 +250,7 @@ if [[ -n "$CUSTOM_DIR" ]]; then
   DESTS=("$CUSTOM_DIR")
 else
   if [[ ${#AGENTS[@]} -eq 0 ]]; then
-    if [[ -t 0 ]]; then
+    if [[ -n "$TTY_FD" ]]; then
       AGENT_CHOICES=(generic claude-code opencode antigravity cursor windsurf copilot codex gemini-cli cline kilo-code roo-code amp zed warp trae pi jetbrains replit factory devin openhands goose augment qwen)
       multiSelect "Select Destinations. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AGENT_CHOICES AGENTS
     fi
@@ -276,8 +282,8 @@ printf "\n"
 
 USE_GH=false
 if [[ "$DRY_RUN" == false ]] && command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
-  if [[ -t 0 ]]; then
-    read -rp "Use The gh Skill Installer Where Supported? [y/N]: " GHANS || GHANS=""
+  if [[ -n "$TTY_FD" ]]; then
+    IFS= read -ru "$TTY_FD" -rp "Use The gh Skill Installer Where Supported? [y/N]: " GHANS || GHANS=""
     [[ "$GHANS" =~ ^[Yy]$ ]] && USE_GH=true
   fi
 fi
