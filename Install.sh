@@ -28,27 +28,27 @@ trap cleanup EXIT INT TERM
 
 printHelp() {
   cat <<'HELP'
-Usage: Install.sh [options]
+Usage: Install.sh [Options]
 
 Options:
-  --all              Install all skills without prompting
-  --skill NAME       Install one skill by name, repeatable
-  --agent NAME       Target harness, repeatable, default is .agents/skills
-  --global           Install to user home instead of project
-  --project          Install to project .agents/skills, default
-  --dir PATH         Custom install directory, overrides --agent and --scope
-  --list             List available skills and exit
-  --dry-run          Show what would be done without copying
-  --help             Show this help
+  --all              Install All Skills Without Prompting
+  --skill NAME       Install One Skill By Name, Repeatable
+  --agent NAME       Target Harness, Repeatable, Default Is .agents/skills
+  --global           Install To User Home Instead Of Project
+  --project          Install To Project .agents/skills, Default
+  --dir PATH         Custom Install Directory, Overrides --agent And --scope
+  --list             List Available Skills And Exit
+  --dry-run          Show What Would Be Done Without Copying
+  --help             Show This Help
 
 Supported Agents:
   claude-code, opencode, codex, copilot, gemini-cli, antigravity, cursor,
   windsurf, cline, kilo-code, roo-code, amp, zed, warp, trae, pi, jetbrains,
   replit, factory, devin, openhands, goose, augment, qwen, generic
-  Paths are verified against each vendor's official docs. Generic is
-  .agents/skills, read by 80+ harnesses as a fallback. Use --agent multiple
-  times for multiple harnesses.
-  Agents with no skills support, like aider and continue, are not listed.
+  Paths Are Verified Against Each Vendor's Official Docs. Generic Is
+  .agents/skills, Read By 80+ Harnesses As A Fallback. Use --agent Multiple
+  Times For Multiple Harnesses.
+  Agents With No Skills Support, Like Aider And Continue, Are Not Listed.
 
 Examples:
   curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash
@@ -64,20 +64,20 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --all) ALL=true; shift ;;
     --skill)
-      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing value for --skill" >&2; exit 1; fi
+      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing Value For --skill" >&2; exit 1; fi
       SKILLS+=("$2"); shift 2 ;;
     --agent)
-      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing value for --agent" >&2; exit 1; fi
+      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing Value For --agent" >&2; exit 1; fi
       AGENTS+=("$2"); shift 2 ;;
     --global) SCOPE="global"; shift ;;
     --project) SCOPE="project"; shift ;;
     --dir)
-      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing value for --dir" >&2; exit 1; fi
+      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing Value For --dir" >&2; exit 1; fi
       CUSTOM_DIR="$2"; shift 2 ;;
     --list) LIST_ONLY=true; shift ;;
     --dry-run) DRY_RUN=true; shift ;;
     --help|-h) printHelp; exit 0 ;;
-    *) echo "Unknown option $1" >&2; printHelp; exit 1 ;;
+    *) echo "Unknown Option $1" >&2; printHelp; exit 1 ;;
   esac
 done
 
@@ -97,10 +97,10 @@ resolveSource() {
     return
   fi
   if ! command -v git >/dev/null 2>&1; then
-    echo "git is required to fetch skills" >&2; exit 1
+    echo "Git Is Required To Fetch Skills" >&2; exit 1
   fi
   TMP_DIR="$(mktemp -d)"
-  printf "%bCloning %s to %s%b\n" "${YELLOW}" "${REPO}" "${TMP_DIR}" "${NC}" >&2
+  printf "%bCloning %s To %s%b\n" "${YELLOW}" "${REPO}" "${TMP_DIR}" "${NC}" >&2
   git clone --depth 1 --filter=blob:none "${REPO_URL}" "${TMP_DIR}" >/dev/null 2>&1
   echo "${TMP_DIR}"
 }
@@ -217,13 +217,13 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
   if [[ "$ALL" == true ]]; then
     SKILLS=("${AVAILABLE[@]}")
   elif [[ -t 0 ]]; then
-    echo "Available skills:"
+    echo "Available Skills:"
     for i in "${!AVAILABLE[@]}"; do
       printf "  %2d) %s\n" $((i+1)) "${AVAILABLE[$i]}"
     done
     echo ""
-    printf "%bEnter numbers comma separated, or 'all'%b\n" "${YELLOW}" "${NC}"
-    read -rp "Pick skills: " PICK || PICK=""
+    printf "%bEnter Numbers Comma Separated, Or 'all'%b\n" "${YELLOW}" "${NC}"
+    read -rp "Pick Skills: " PICK || PICK=""
     if [[ "$PICK" == "all" ]]; then
       SKILLS=("${AVAILABLE[@]}")
     else
@@ -238,7 +238,7 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
       done
     fi
   else
-    echo "No --skill or --all given and no tty, listing skills" >&2
+    echo "No --skill Or --all Given And No TTY, Listing Skills" >&2
     printf "%s\n" "${AVAILABLE[@]}"
     exit 0
   fi
@@ -246,30 +246,30 @@ fi
 
 for s in "${SKILLS[@]}"; do
   if ! validateSkillName "$s"; then
-    echo "Invalid skill name $s" >&2; exit 1
+    echo "Invalid Skill Name $s" >&2; exit 1
   fi
 done
 
 if [[ -n "$CUSTOM_DIR" ]]; then
   if ! isSafePath "$CUSTOM_DIR"; then
-    echo "Refusing unsafe custom dir $CUSTOM_DIR" >&2; exit 1
+    echo "Refusing Unsafe Custom Dir $CUSTOM_DIR" >&2; exit 1
   fi
   DESTS=("$CUSTOM_DIR")
 else
   if [[ ${#AGENTS[@]} -eq 0 ]]; then
     if [[ -t 0 && "$SCOPE" == "project" ]]; then
       echo ""
-      echo "Where to install? Generic .agents/skills works with 80+ harnesses as fallback."
-      echo "  1) Generic .agents/skills   - Codex, Antigravity, Amp, Zed, Goose, OpenHands, and most others"
+      echo "Where To Install? Generic .agents/skills Works With 80+ Harnesses As Fallback."
+      echo "  1) Generic .agents/skills   - Codex, Antigravity, Amp, Zed, Goose, OpenHands, And Most Others"
       echo "  2) Claude Code              - .claude/skills"
       echo "  3) OpenCode                 - .opencode/skills"
-      echo "  4) Antigravity IDE          - ~/.gemini/config/skills when --global"
+      echo "  4) Antigravity IDE          - ~/.gemini/config/skills When --global"
       echo "  5) Cursor                   - .cursor/skills"
       echo "  6) Windsurf                 - .windsurf/skills"
       echo "  7) GitHub Copilot           - .github/skills"
       echo "  8) Gemini CLI               - .gemini/skills"
-      echo "  9) Pick specific harnesses"
-      read -rp "Pick destination [1]: " DPICK || DPICK=""
+      echo "  9) Pick Specific Harnesses"
+      read -rp "Pick Destination [1]: " DPICK || DPICK=""
       DPICK=${DPICK:-1}
       case "$DPICK" in
         1) AGENTS=("generic") ;;
@@ -281,8 +281,8 @@ else
         7) AGENTS=("copilot") ;;
         8) AGENTS=("gemini-cli") ;;
         9)
-          echo "Supported harnesses: claude-code, opencode, codex, copilot, gemini-cli, antigravity, cursor, windsurf, cline, kilo-code, roo-code, amp, zed, warp, trae, pi, jetbrains, replit, factory, devin, openhands, goose, augment, qwen, generic"
-          read -rp "Enter harness names comma separated: " APICK || APICK=""
+          echo "Supported Harnesses: claude-code, opencode, codex, copilot, gemini-cli, antigravity, cursor, windsurf, cline, kilo-code, roo-code, amp, zed, warp, trae, pi, jetbrains, replit, factory, devin, openhands, goose, augment, qwen, generic"
+          read -rp "Enter Harness Names Comma Separated: " APICK || APICK=""
           IFS=',' read -ra AGENTS <<< "$APICK"
           ;;
         *) AGENTS=("generic") ;;
@@ -310,7 +310,7 @@ printf "\n"
 USE_GH=false
 if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
   if [[ -t 0 ]]; then
-    read -rp "Use gh skill install when available? [y/N]: " GHANS || GHANS=""
+    read -rp "Use gh skill install When Available? [y/N]: " GHANS || GHANS=""
     [[ "$GHANS" =~ ^[Yy]$ ]] && USE_GH=true
   fi
 fi
@@ -321,19 +321,19 @@ for skill in "${SKILLS[@]}"; do
     if [[ "$avail" == "$skill" ]]; then FOUND=true; break; fi
   done
   if [[ "$FOUND" == false ]]; then
-    printf "%bSkip unknown skill %s%b\n" "${YELLOW}" "$skill" "${NC}"
+    printf "%bSkip Unknown Skill %s%b\n" "${YELLOW}" "$skill" "${NC}"
     continue
   fi
   for dest in "${DESTS[@]}"; do
     TARGET="${dest}/${skill}"
     if [[ "$DRY_RUN" == true ]]; then
-      echo "[dry-run] $skill -> $TARGET"
+      echo "[Dry Run] $skill -> $TARGET"
       continue
     fi
     if [[ "$USE_GH" == true ]]; then
-      printf "%bInstalling%b %s via gh to %s\n" "${GREEN}" "${NC}" "$skill" "$dest"
+      printf "%bInstalling%b %s Via gh To %s\n" "${GREEN}" "${NC}" "$skill" "$dest"
       if ! gh skill install "${REPO}" "$skill" --agent generic --scope "$SCOPE" --force 2>&1; then
-        printf "%bgh install failed, falling back to copy%b\n" "${YELLOW}" "${NC}"
+        printf "%bgh Install Failed, Falling Back To Copy%b\n" "${YELLOW}" "${NC}"
         mkdir -p -- "$TARGET"
         cp -r -- "${SRC}/${skill}/." "$TARGET/"
       fi
@@ -349,10 +349,10 @@ done
 # The EXIT trap is the safety net for early exits and errors.
 cleanup
 
-printf "\n%bDone%b. Installed %d skill(s) to %d location(s).\n" "${GREEN}" "${NC}" "${#SKILLS[@]}" "${#DESTS[@]}"
+printf "\n%bDone%b. Installed %d Skill(s) To %d Location(s).\n" "${GREEN}" "${NC}" "${#SKILLS[@]}" "${#DESTS[@]}"
 if [[ "$SCOPE" == "project" ]]; then
-  echo "Project skills live in .agents/skills and are shared by most harnesses."
-  echo "Commit them if you want the team to have them."
+  echo "Project Skills Live In .agents/skills And Are Shared By Most Harnesses."
+  echo "Commit Them If You Want The Team To Have Them."
 else
-  echo "Global skills are now available in every project."
+  echo "Global Skills Are Now Available In Every Project."
 fi
