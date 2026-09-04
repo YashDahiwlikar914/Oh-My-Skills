@@ -294,11 +294,11 @@ else
   DESTS=()
   for a in "${AGENTS[@]}"; do
     a="$(echo "$a" | xargs | tr '[:upper:]' '[:lower:]')"
-    if [[ "$a" == "generic" ]]; then
-      a="generic"
-    fi
     DESTS+=("$(agentToPath "$a" "$SCOPE")")
   done
+  # Agents can share one path (codex, zed, goose all read .agents/skills).
+  # Dedupe so each destination installs once.
+  mapfile -t DESTS < <(printf '%s\n' "${DESTS[@]}" | awk '!seen[$0]++')
 fi
 
 printf "\n%bSource%b  %s\n" "${GREEN}" "${NC}" "$SRC"
@@ -344,6 +344,10 @@ for skill in "${SKILLS[@]}"; do
     fi
   done
 done
+
+# Remove the cloned temp repo as soon as copying finishes.
+# The EXIT trap is the safety net for early exits and errors.
+cleanup
 
 printf "\n%bDone%b. Installed %d skill(s) to %d location(s).\n" "${GREEN}" "${NC}" "${#SKILLS[@]}" "${#DESTS[@]}"
 if [[ "$SCOPE" == "project" ]]; then
