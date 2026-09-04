@@ -46,9 +46,9 @@ Supported Agents:
   windsurf, cline, kilo-code, roo-code, amp, zed, warp, trae, pi, jetbrains,
   replit, factory, devin, openhands, goose, augment, qwen, generic
   Paths Are Verified Against Each Vendor's Official Docs. Generic Is
-  .agents/skills, Read By 80+ Harnesses As A Fallback. Use --agent Multiple
+  .agents/skills, Which Most Harnesses Read Too. Use --agent Multiple
   Times For Multiple Harnesses.
-  Agents With No Skills Support, Like Aider And Continue, Are Not Listed.
+  Aider And Continue Have No Skills Support, So They Are Not Listed.
 
 Examples:
   curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash
@@ -222,7 +222,7 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
       printf "  %2d) %s\n" $((i+1)) "${AVAILABLE[$i]}"
     done
     echo ""
-    printf "%bEnter Numbers Comma Separated, Or 'all'%b\n" "${YELLOW}" "${NC}"
+    printf "%bEnter Numbers Comma Separated, Or Type all%b\n" "${YELLOW}" "${NC}"
     read -rp "Pick Skills: " PICK || PICK=""
     if [[ "$PICK" == "all" ]]; then
       SKILLS=("${AVAILABLE[@]}")
@@ -238,7 +238,7 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
       done
     fi
   else
-    echo "No --skill Or --all Given And No TTY, Listing Skills" >&2
+    echo "No --skill Or --all Given And No Terminal Attached, So Here Is The Skill List" >&2
     printf "%s\n" "${AVAILABLE[@]}"
     exit 0
   fi
@@ -259,7 +259,7 @@ else
   if [[ ${#AGENTS[@]} -eq 0 ]]; then
     if [[ -t 0 && "$SCOPE" == "project" ]]; then
       echo ""
-      echo "Where To Install? Generic .agents/skills Works With 80+ Harnesses As Fallback."
+      echo "Where Should The Skills Go? Generic .agents/skills Covers Most Harnesses."
       echo "  1) Generic .agents/skills   - Codex, Antigravity, Amp, Zed, Goose, OpenHands, And Most Others"
       echo "  2) Claude Code              - .claude/skills"
       echo "  3) OpenCode                 - .opencode/skills"
@@ -310,7 +310,7 @@ printf "\n"
 USE_GH=false
 if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
   if [[ -t 0 ]]; then
-    read -rp "Use gh skill install When Available? [y/N]: " GHANS || GHANS=""
+    read -rp "Use The gh Skill Installer Where Supported? [y/N]: " GHANS || GHANS=""
     [[ "$GHANS" =~ ^[Yy]$ ]] && USE_GH=true
   fi
 fi
@@ -352,7 +352,7 @@ cleanup
 printf "\n%bDone%b. Installed %d Skill(s) To %d Location(s).\n" "${GREEN}" "${NC}" "${#SKILLS[@]}" "${#DESTS[@]}"
 if [[ "$SCOPE" == "project" ]]; then
   echo "Project Skills Live In .agents/skills And Are Shared By Most Harnesses."
-  echo "Commit Them If You Want The Team To Have Them."
+  echo "Commit Them If You Want Your Team To Get Them Too."
 else
   echo "Global Skills Are Now Available In Every Project."
 fi
