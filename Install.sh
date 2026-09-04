@@ -112,41 +112,15 @@ listAvailableSkills() {
   done | sort
 }
 
-validateSkillName() {
-  [[ "$1" =~ ^[a-z0-9][a-z0-9-]*$ ]]
-}
-
 isSafePath() {
   local p="$1"
   [[ -n "$p" ]] && [[ "$p" != "/" ]] && [[ "$p" != "$HOME" ]]
 }
 
 agentToPath() {
-  # Paths verified against official docs (Sep 2026):
-  # claude: code.claude.com/docs/en/skills
-  # opencode: opencode.ai/docs/skills
-  # cursor: cursor.com/docs/context/skills
-  # codex: developers.openai.com/codex (.agents/skills only, not .codex/skills)
-  # copilot: docs.github.com/en/copilot/concepts/agents/about-agent-skills
-  # gemini: github.com/google-gemini/gemini-cli docs/cli/skills.md
-  # antigravity: antigravity.google/docs/skills
-  # windsurf: docs.windsurf.com/windsurf/cascade/skills
-  # cline: docs.cline.bot/features/skills
-  # kilo: kilo.ai/docs/features/skills
-  # roo: docs.roocode.com/features/skills
-  # amp: ampcode.com/docs/customize/skills
-  # zed: zed.dev/docs/ai/skills (.agents/skills only)
-  # warp: docs.warp.dev/agents/capabilities/skills
-  # trae: docs.trae.ai/ide/skills
-  # pi: github.com/earendil-works/pi docs/skills.md
-  # junie: junie.jetbrains.com/docs/agent-skills.html
-  # replit: docs.replit.com/features/agent/skills (project only)
-  # droid: docs.factory.ai/harness/skills
-  # devin: docs.devin.ai/cli/extensibility/skills
-  # openhands: docs.openhands.dev/overview/skills.md
-  # goose: goose-docs.ai/docs/guides/context-engineering/using-skills
-  # augment: docs.augmentcode.com/cli/skills.md
-  # qwen: qwenlm.github.io/qwen-code-docs users/features/skills
+  # Checked against vendor docs in Sep 2026. The surprises:
+  # codex, zed, goose, openhands only read .agents/skills, never their own dir.
+  # antigravity reads ~/.gemini/config/skills globally, .agents/skills per project.
   local agent="$1"
   local scope="$2"
   case "${agent}" in
@@ -245,8 +219,9 @@ fi
 # Same skill typed twice should still install once.
 mapfile -t SKILLS < <(printf '%s\n' "${SKILLS[@]}" | awk '!seen[$0]++')
 
+# Skill names come from directory names, so they are always this shape.
 for s in "${SKILLS[@]}"; do
-  if ! validateSkillName "$s"; then
+  if ! [[ "$s" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
     echo "Invalid Skill Name $s" >&2; exit 1
   fi
 done
