@@ -60,20 +60,21 @@ Examples:
 HELP
 }
 
+needValue() {
+  if [[ $# -lt 2 || "$2" == --* ]]; then
+    echo "Missing Value For $1" >&2
+    exit 1
+  fi
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --all) ALL=true; shift ;;
-    --skill)
-      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing Value For --skill" >&2; exit 1; fi
-      SKILLS+=("$2"); shift 2 ;;
-    --agent)
-      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing Value For --agent" >&2; exit 1; fi
-      AGENTS+=("$2"); shift 2 ;;
+    --skill) needValue "$@"; SKILLS+=("$2"); shift 2 ;;
+    --agent) needValue "$@"; AGENTS+=("$2"); shift 2 ;;
     --global) SCOPE="global"; shift ;;
     --project) SCOPE="project"; shift ;;
-    --dir)
-      if [[ $# -lt 2 || "$2" == --* ]]; then echo "Missing Value For --dir" >&2; exit 1; fi
-      CUSTOM_DIR="$2"; shift 2 ;;
+    --dir) needValue "$@"; CUSTOM_DIR="$2"; shift 2 ;;
     --list) LIST_ONLY=true; shift ;;
     --dry-run) DRY_RUN=true; shift ;;
     --help|-h) printHelp; exit 0 ;;
@@ -82,12 +83,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 resolveSource() {
-  if [[ -f "./Install.sh" && -d "./parallel-agents" ]]; then
-    echo "$(pwd)"
-    return
-  fi
-  if [[ -f "./install.sh" && -d "./parallel-agents" ]]; then
-    echo "$(pwd)"
+  # Local copy wins when this file sits next to the skill folders.
+  if { [[ -f ./Install.sh ]] || [[ -f ./install.sh ]]; } && [[ -d ./parallel-agents ]]; then
+    pwd
     return
   fi
   local selfDir
@@ -229,7 +227,7 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
     else
       IFS=',' read -ra NUMS <<< "$PICK"
       for n in "${NUMS[@]}"; do
-        n="$(echo "$n" | xargs)"
+        n="${n//[[:space:]]/}"
         [[ "$n" =~ ^[0-9]+$ ]] || continue
         idx=$((n-1))
         if [[ -n "${AVAILABLE[$idx]:-}" ]]; then
@@ -243,6 +241,9 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
     exit 0
   fi
 fi
+
+# Same skill typed twice should still install once.
+mapfile -t SKILLS < <(printf '%s\n' "${SKILLS[@]}" | awk '!seen[$0]++')
 
 for s in "${SKILLS[@]}"; do
   if ! validateSkillName "$s"; then
@@ -293,7 +294,8 @@ else
   fi
   DESTS=()
   for a in "${AGENTS[@]}"; do
-    a="$(echo "$a" | xargs | tr '[:upper:]' '[:lower:]')"
+    a="${a//[[:space:]]/}"
+    a="${a,,}"
     DESTS+=("$(agentToPath "$a" "$SCOPE")")
   done
   # Agents can share one path (codex, zed, goose all read .agents/skills).
