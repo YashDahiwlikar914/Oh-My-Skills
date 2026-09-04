@@ -43,7 +43,7 @@ This repo holds my agent skills. There are 34 here for development and writing w
 
 ## Install
 
-The one liner shows a numbered skill list and a destination menu. Pick what you want. Without gh installed it falls back to a plain copy.
+The one liner shows a skill list and a destination list. Toggle what you want with spacebar, move with arrow keys, and confirm with enter. Without gh installed it falls back to a plain copy.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/YashDahiwlikar914/Oh-My-Skills/main/Install.sh | bash

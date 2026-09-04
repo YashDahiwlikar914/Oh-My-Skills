@@ -117,6 +117,58 @@ isSafePath() {
   [[ -n "$p" ]] && [[ "$p" != "/" ]] && [[ "$p" != "$HOME" ]]
 }
 
+multiSelect() {
+  # Checkbox list. Space toggles, arrows or j and k move, a toggles all,
+  # enter confirms, q cancels. Selected options land in the outSel array.
+  local header="$1"
+  local -n inOpts="$2"
+  local -n outSel="$3"
+  local count=${#inOpts[@]}
+  local sel i j key all mark arrow
+  outSel=()
+  (( count == 0 )) && return 0
+  for ((i = 0; i < count; i++)); do sel[i]=0; done
+  i=0
+  printf "%s\n" "$header"
+  printf "\033[?25l"
+  while true; do
+    printf "\033[%dA" "$count"
+    for ((j = 0; j < count; j++)); do
+      mark="[ ]"
+      arrow=" "
+      (( sel[j] == 1 )) && mark="[x]"
+      (( j == i )) && arrow=">"
+      printf "\033[2K%s %s %s\n" "$arrow" "$mark" "${inOpts[$j]}"
+    done
+    key=""
+    # IFS= matters. read would otherwise strip the space key itself.
+    IFS= read -rsn1 key || true
+    if [[ "$key" == $'\e' ]]; then
+      IFS= read -rsn2 key || true
+      case "$key" in
+        '[A') i=$(( (i + count - 1) % count )) ;;
+        '[B') i=$(( (i + 1) % count )) ;;
+      esac
+    elif [[ "$key" == " " ]]; then
+      sel[i]=$(( 1 - sel[i] ))
+    elif [[ "$key" == "j" ]]; then
+      i=$(( (i + 1) % count ))
+    elif [[ "$key" == "k" ]]; then
+      i=$(( (i + count - 1) % count ))
+    elif [[ "$key" == "a" || "$key" == "A" ]]; then
+      all=1
+      for ((j = 0; j < count; j++)); do (( sel[j] == 1 )) || all=0; done
+      for ((j = 0; j < count; j++)); do sel[j]=$(( 1 - all )); done
+    elif [[ -z "$key" ]]; then
+      for ((j = 0; j < count; j++)); do (( sel[j] == 1 )) && outSel+=("${inOpts[$j]}"); done
+      break
+    elif [[ "$key" == "q" || "$key" == "Q" ]]; then
+      break
+    fi
+  done
+  printf "\033[?25h"
+}
+
 agentToPath() {
   # Checked against vendor docs in Sep 2026. The surprises:
   # codex, zed, goose, openhands only read .agents/skills, never their own dir.
@@ -189,25 +241,12 @@ if [[ ${#SKILLS[@]} -eq 0 ]]; then
   if [[ "$ALL" == true ]]; then
     SKILLS=("${AVAILABLE[@]}")
   elif [[ -t 0 ]]; then
-    echo "Available Skills:"
-    for i in "${!AVAILABLE[@]}"; do
-      printf "  %2d) %s\n" $((i+1)) "${AVAILABLE[$i]}"
-    done
-    echo ""
-    printf "%bEnter Numbers Comma Separated, Or Type all%b\n" "${YELLOW}" "${NC}"
-    read -rp "Pick Skills: " PICK || PICK=""
-    if [[ "$PICK" == "all" ]]; then
-      SKILLS=("${AVAILABLE[@]}")
-    else
-      IFS=',' read -ra NUMS <<< "$PICK"
-      for n in "${NUMS[@]}"; do
-        n="${n//[[:space:]]/}"
-        [[ "$n" =~ ^[0-9]+$ ]] || continue
-        idx=$((n-1))
-        if [[ -n "${AVAILABLE[$idx]:-}" ]]; then
-          SKILLS+=("${AVAILABLE[$idx]}")
-        fi
-      done
+    PICKED_SKILLS=()
+    multiSelect "Select Skills. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AVAILABLE PICKED_SKILLS
+    SKILLS=("${PICKED_SKILLS[@]}")
+    if [[ ${#SKILLS[@]} -eq 0 ]]; then
+      echo "Nothing Selected"
+      exit 0
     fi
   else
     echo "No --skill Or --all Given And No Terminal Attached, So Here Is The Skill List" >&2
@@ -233,36 +272,15 @@ if [[ -n "$CUSTOM_DIR" ]]; then
   DESTS=("$CUSTOM_DIR")
 else
   if [[ ${#AGENTS[@]} -eq 0 ]]; then
-    if [[ -t 0 && "$SCOPE" == "project" ]]; then
-      echo ""
-      echo "Where Should The Skills Go? Generic .agents/skills Covers Most Harnesses."
-      echo "  1) Generic .agents/skills   - Codex, Antigravity, Amp, Zed, Goose, OpenHands, And Most Others"
-      echo "  2) Claude Code              - .claude/skills"
-      echo "  3) OpenCode                 - .opencode/skills"
-      echo "  4) Antigravity IDE          - ~/.gemini/config/skills When --global"
-      echo "  5) Cursor                   - .cursor/skills"
-      echo "  6) Windsurf                 - .windsurf/skills"
-      echo "  7) GitHub Copilot           - .github/skills"
-      echo "  8) Gemini CLI               - .gemini/skills"
-      echo "  9) Pick Specific Harnesses"
-      read -rp "Pick Destination [1]: " DPICK || DPICK=""
-      DPICK=${DPICK:-1}
-      case "$DPICK" in
-        1) AGENTS=("generic") ;;
-        2) AGENTS=("claude-code") ;;
-        3) AGENTS=("opencode") ;;
-        4) AGENTS=("antigravity") ;;
-        5) AGENTS=("cursor") ;;
-        6) AGENTS=("windsurf") ;;
-        7) AGENTS=("copilot") ;;
-        8) AGENTS=("gemini-cli") ;;
-        9)
-          echo "Supported Harnesses: claude-code, opencode, codex, copilot, gemini-cli, antigravity, cursor, windsurf, cline, kilo-code, roo-code, amp, zed, warp, trae, pi, jetbrains, replit, factory, devin, openhands, goose, augment, qwen, generic"
-          read -rp "Enter Harness Names Comma Separated: " APICK || APICK=""
-          IFS=',' read -ra AGENTS <<< "$APICK"
-          ;;
-        *) AGENTS=("generic") ;;
-      esac
+    if [[ -t 0 ]]; then
+      AGENT_CHOICES=(generic claude-code opencode antigravity cursor windsurf copilot codex gemini-cli cline kilo-code roo-code amp zed warp trae pi jetbrains replit factory devin openhands goose augment qwen)
+      PICKED_AGENTS=()
+      multiSelect "Select Destinations. Space Toggles, Arrows Or J And K Move, A Selects All, Enter Confirms" AGENT_CHOICES PICKED_AGENTS
+      if [[ ${#PICKED_AGENTS[@]} -eq 0 ]]; then
+        AGENTS=("generic")
+      else
+        AGENTS=("${PICKED_AGENTS[@]}")
+      fi
     else
       AGENTS=("generic")
     fi
